@@ -1,0 +1,28 @@
+workflows:
+  android-apk:
+    name: Kwentuhan Android APK
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      # For a Play Store-ready signed APK, upload a keystore in Codemagic
+      # and uncomment the following two lines:
+      # android_signing:
+      #   - kwentuhan_keystore
+
+    scripts:
+      - name: Ensure Flutter platform files
+        script: |
+          # The checked-in platform folders are included. This fallback lets
+          # Codemagic restore the official wrapper metadata if necessary.
+          if [ ! -f android/gradle/wrapper/gradle-wrapper.jar ] || [ ! -d ios/Runner.xcodeproj ]; then
+            flutter create --platforms=android,ios .
+          fi
+      - name: Install packages
+        script: flutter pub get
+      - name: Build release APK
+        script: flutter build apk --release
+
+    artifacts:
+      - build/**/outputs/apk/**/*.apk

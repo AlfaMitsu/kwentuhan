@@ -7,12 +7,18 @@ This directory is the Flutter conversion of the finished Kwentuhan elementary st
 Install Flutter 3.22 or newer, then run:
 
 ```bash
-flutter create .
 flutter pub get
 flutter run
 ```
 
-`flutter create .` only adds the platform runner folders when the checkout is first opened; it does not replace the `lib/` conversion or the bundled assets.
+The Android and iOS runner folders are now included. If you ever need to refresh
+their generated wrapper metadata with a newer Flutter SDK, run:
+
+```bash
+flutter create --platforms=android,ios .
+```
+
+This does not replace the `lib/` conversion or the bundled assets.
 
 The project targets Android, iOS, and Flutter web. The first run may ask the operating system for speech/audio permissions. Narration uses the device's Filipino (`fil-PH`) voice when one is available and falls back to the platform speech voice otherwise.
 
@@ -24,5 +30,10 @@ flutter build apk --release
 flutter build ios --release
 flutter build web --release
 ```
+
+The repository also includes `codemagic.yaml`. In Codemagic, add the repository,
+select the `android-apk` workflow, and start a build. The generated APK appears
+in the build artifacts. For Play Store distribution, upload an Android keystore
+in Codemagic and enable the `android_signing` entry in that workflow.
 
 The bundled assets are copied from the finished web app so the Flutter build is self-contained.
