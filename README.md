@@ -31,6 +31,13 @@ flutter build ios --release
 flutter build web --release
 ```
 
+The Android wrapper is pinned to Gradle 8.14.0, which is the minimum required
+by the current Flutter Android toolchain. The Android project also explicitly
+opts out of the new AGP DSL and built-in Kotlin migration until its legacy
+Kotlin plugin is migrated. Codemagic reapplies these settings after refreshing
+the platform folders, so a generated wrapper cannot silently restore Gradle
+8.4 or the incompatible defaults.
+
 The repository also includes `codemagic.yaml`. In Codemagic, add the repository,
 select the `android-apk` workflow, and start a build. The generated APK appears
 in the build artifacts. For Play Store distribution, upload an Android keystore

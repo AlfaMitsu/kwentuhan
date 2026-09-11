@@ -19,6 +19,45 @@ workflows:
           if [ ! -f android/gradle/wrapper/gradle-wrapper.jar ] || [ ! -d ios/Runner.xcodeproj ]; then
             flutter create --platforms=android,ios .
           fi
+      - name: Align Android Gradle toolchain
+        script: |
+          set -e
+          wrapper_props="android/gradle/wrapper/gradle-wrapper.properties"
+          if [ -f "$wrapper_props" ]; then
+            awk '
+              BEGIN { updated = 0 }
+              /^distributionUrl=/ {
+                print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip"
+                updated = 1
+                next
+              }
+              { print }
+              END {
+                if (!updated) print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip"
+              }
+            ' "$wrapper_props" > "$wrapper_props.tmp"
+            mv "$wrapper_props.tmp" "$wrapper_props"
+          fi
+          touch android/gradle.properties
+          awk '
+            BEGIN { new_dsl = 0; built_in_kotlin = 0 }
+            /^android.newDsl=/ {
+              print "android.newDsl=false"
+              new_dsl = 1
+              next
+            }
+            /^android.builtInKotlin=/ {
+              print "android.builtInKotlin=false"
+              built_in_kotlin = 1
+              next
+            }
+            { print }
+            END {
+              if (!new_dsl) print "android.newDsl=false"
+              if (!built_in_kotlin) print "android.builtInKotlin=false"
+            }
+          ' android/gradle.properties > android/gradle.properties.tmp
+          mv android/gradle.properties.tmp android/gradle.properties
       - name: Install packages
         script: flutter pub get
       - name: Build release APK
