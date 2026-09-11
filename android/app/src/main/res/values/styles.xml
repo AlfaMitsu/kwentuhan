@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LaunchTheme" parent="android:style/Theme.Light.NoTitleBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSplashScreenBackground">#B9E5FF</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#B9E5FF</item>
+    </style>
+
+    <style name="NormalTheme" parent="android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">#B9E5FF</item>
+        <item name="android:fontFamily">sans</item>
+    </style>
+</resources>

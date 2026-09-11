@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+# Lightweight wrapper for this exported project. Flutter/Codemagic may add the
+# official gradle-wrapper.jar when `flutter create .` is run; use it when it is
+# present, otherwise fall back to a globally installed Gradle executable.
+set -e
+
+APP_HOME=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+WRAPPER_JAR="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+
+if [ -f "$WRAPPER_JAR" ]; then
+  if [ -n "${JAVA_HOME:-}" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    JAVACMD="$JAVA_HOME/bin/java"
+  else
+    JAVACMD="java"
+  fi
+  exec "$JAVACMD" -classpath "$WRAPPER_JAR" org.gradle.wrapper.GradleWrapperMain "$@"
+fi
+
+if command -v gradle >/dev/null 2>&1; then
+  exec gradle "$@"
+fi
+
+echo "Gradle is not installed. Run 'flutter create .' once to restore the full Gradle wrapper." >&2
+exit 1
