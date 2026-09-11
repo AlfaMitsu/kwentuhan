@@ -27,13 +27,13 @@ workflows:
             awk '
               BEGIN { updated = 0 }
               /^distributionUrl=/ {
-                print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip"
+                print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14-bin.zip"
                 updated = 1
                 next
               }
               { print }
               END {
-                if (!updated) print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip"
+                if (!updated) print "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14-bin.zip"
               }
             ' "$wrapper_props" > "$wrapper_props.tmp"
             mv "$wrapper_props.tmp" "$wrapper_props"
